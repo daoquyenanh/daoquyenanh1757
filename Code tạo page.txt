@@ -1,0 +1,82 @@
+function loadCreatePage() {
+	console.log('L?y thông tin t?o page...');
+	var i = Math.floor((Math.random() * 100000) + 1);
+var wordlist1 = ["Nguy?n","Lê","Tr?n","Ph?m","Hu?nh","Phan","Vu","Võ","Ð?ng","Bùi","Ð?","Ngô","Duong","Lý"];           
+var wordlist2 = ["Di?u Ái","Kh? Ái","Ng?c Ái","Hoài An","Hu? An","Minh An","Phuong An","Thanh An","Hu? Ân","B?o Anh","Di?p Anh","H?i Anh","H?ng Anh","Huy?n Anh","Ki?u Anh","Kim Anh","Lan Anh","Mai Anh","Minh Anh","M? Anh","Ng?c Anh","Nguy?t Anh","Nhu Anh","Phuong Anh","Qu? Anh","Qu?nh Anh","Thúy Anh","Thùy Anh","Trâm Anh","Trang Anh","Tú Anh","Tuy?t Anh","Vân Anh","Y?n Anh","Kim Ánh","Ng?c Ánh","Nguy?t Ánh"];
+var randomNumber1 = parseInt(Math.random() * wordlist1.length);            
+var randomNumber2 = parseInt(Math.random() * wordlist2.length);            
+var page_name = wordlist1[randomNumber1] + " " + wordlist2[randomNumber2];     
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function () {
+		if (xhttp.status == 200 && xhttp.readyState == 4) {
+			var data = xhttp.responseText;
+			var getValue = data.match(/name="fb_dtsg" value="(.+?)" autocomplete="off"/g);
+			var fb_dtsg = getValue[0].replace('name="fb_dtsg" value="', '');
+			fb_dtsg = fb_dtsg.replace('" autocomplete="off"', '');
+			var charset_test = '€,´,€,´,?,?,?';
+			var super_category = 1016;
+			var category = 2700;
+			if(fb_dtsg == null) {
+				console.log('Tr?ng fb_dtsg');
+			} else {
+				console.log('Ðang t?o');
+				submitCreatePage(fb_dtsg, charset_test, super_category, category, i);
+			}
+		}
+	};
+	xhttp.open("GET", 'https://m.facebook.com/pages/create/?page_name=' + page_name +' '+ i + '&category=0&super_category=1016', true);
+	xhttp.send();
+}
+function submitCreatePage(fb_dtsg, charset_test, super_category, category) {
+	var i = Math.floor((Math.random() * 100000) + 1);
+var wordlist1 = ["Nguy?n","Lê","Tr?n","Ph?m","Hu?nh","Phan","Vu","Võ","Ð?ng","Bùi","Ð?","Ngô","Duong","Lý"];           
+var wordlist2 = ["Di?u Ái","Kh? Ái","Ng?c Ái","Hoài An","Hu? An","Minh An","Phuong An","Thanh An","Hu? Ân","B?o Anh","Di?p Anh","H?i Anh","H?ng Anh","Huy?n Anh","Ki?u Anh","Kim Anh","Lan Anh","Mai Anh","Minh Anh","M? Anh","Ng?c Anh","Nguy?t Anh","Nhu Anh","Phuong Anh","Qu? Anh","Qu?nh Anh","Thúy Anh","Thùy Anh","Trâm Anh","Trang Anh","Tú Anh","Tuy?t Anh","Vân Anh","Y?n Anh","Kim Ánh","Ng?c Ánh","Nguy?t Ánh"];
+var randomNumber1 = parseInt(Math.random() * wordlist1.length);            
+var randomNumber2 = parseInt(Math.random() * wordlist2.length);            
+var page_name = wordlist1[randomNumber1] + " " + wordlist2[randomNumber2];  
+console.log(page_name);   
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function () {
+		if (xhttp.status == 200 && xhttp.readyState == 4) {
+			console.log('Skip step info page...');
+			var url = xhttp.responseURL;
+			skipStepSubmitInfoPage(url);
+		}
+	};
+	xhttp.open("POST", 'https://m.facebook.com/pages/create/add/', true);
+	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	xhttp.send("fb_dtsg="+fb_dtsg+"&charset_test="+charset_test+"&page_name=" + page_name +" "+ i + "&super_category="+super_category+"&category="+category);
+}
+function skipStepSubmitInfoPage(url) {
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function () {
+		if (xhttp.status == 200 && xhttp.readyState == 4) {
+			skipStepSubmitInfoPage2(url + '&step=username&skip=true');
+		}
+	};
+	xhttp.open("GET", url + '&step=about&skip=true', true);
+	xhttp.send();
+}
+function skipStepSubmitInfoPage2(url) {
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function () {
+		if (xhttp.status == 200 && xhttp.readyState == 4) {
+			countDown();
+		}
+	};
+	xhttp.open("GET", url, true);
+	xhttp.send();
+}
+function countDown () {
+	console.log('reload script...');
+	var a = 222;
+	var ITV = setInterval(function(){
+	console.log('~ ' + a + 'giây');
+	a--;
+	if(a === 0) {
+		clearInterval(ITV);
+		loadCreatePage();
+	}
+	}, 1000);
+}
+loadCreatePage();
